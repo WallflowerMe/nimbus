@@ -48,6 +48,7 @@
 @synthesize maxAge                  = _maxAge;
 @synthesize initialImage            = _initialImage;
 @synthesize delegate                = _delegate;
+@synthesize pathToNetworkImage      = _pathToNetworkImage;
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,7 +181,13 @@
 
   if (nil != image) {
     // Display the new image.
-    [self setImage:image];
+    // this transition would be more modularly done by handing it to the delegate
+    [UIView transitionWithView:self
+                      duration:0.2f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^{
+                      self.image = image;
+                    } completion:NULL];
 
   } else {
     [self setImage:self.initialImage];
@@ -333,6 +340,9 @@
     if (nil == url) {
       return;
     }
+    
+    _pathToNetworkImage = pathToNetworkImage;
+    
     // We explicitly do not allow negative display sizes. Check the call stack to figure
     // out who is providing a negative display size. It's possible that displaySize is an
     // uninitialized CGSize structure.

@@ -89,6 +89,8 @@ typedef enum {
 
 #pragma mark Requesting a Network Image
 
+@property (readonly) NSString *pathToNetworkImage;
+
 - (void)setPathToNetworkImage:(NSString *)pathToNetworkImage;
 - (void)setPathToNetworkImage:(NSString *)pathToNetworkImage forDisplaySize:(CGSize)displaySize;
 - (void)setPathToNetworkImage:(NSString *)pathToNetworkImage forDisplaySize:(CGSize)displaySize contentMode:(UIViewContentMode)contentMode;

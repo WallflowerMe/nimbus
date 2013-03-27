@@ -1412,6 +1412,8 @@ CGSize NISizeOfAttributedStringConstrainedToSize(NSAttributedString *attributedS
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 - (void)drawTextInRect:(CGRect)rect {
+  BOOL createdGraphicsContext = NO;
+  
   if (NIVerticalTextAlignmentTop != self.verticalTextAlignment) {
     rect.origin.y = [self _verticalOffsetForBounds:rect];
   }
@@ -1426,6 +1428,10 @@ CGSize NISizeOfAttributedStringConstrainedToSize(NSAttributedString *attributedS
   }
 
   if (nil != attributedStringWithLinks) {
+    if (UIGraphicsGetCurrentContext() == nil) {
+      UIGraphicsBeginImageContextWithOptions(rect.size, YES, 0.0);
+      createdGraphicsContext = TRUE;
+    }
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGContextSaveGState(ctx);
 
@@ -1453,6 +1459,9 @@ CGSize NISizeOfAttributedStringConstrainedToSize(NSAttributedString *attributedS
     [self drawAttributedString:attributedStringWithLinks rect:rect];
 
     CGContextRestoreGState(ctx);
+    if (createdGraphicsContext) {
+      UIGraphicsEndImageContext();
+    }
 
   } else {
     [super drawTextInRect:rect];
